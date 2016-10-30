@@ -3,18 +3,24 @@ const { PropTypes } = React
 
 const Link = ({ active, children, onClick }) => {
   if (active) {
-    return <span>{children}</span>
+    return React.createElement(
+      'span',
+      null,
+      children
+    )
   }
 
   return (
-    <a href="#"
-       onClick={e => {
-         e.preventDefault()
-         onClick()
-       }}
-    >
-      {children}
-    </a>
+    React.createElement(
+      'a',
+      { href: '#',
+        onClick: e => {
+          e.preventDefault()
+          onClick()
+        }
+      },
+      children
+    )
   )
 }
 

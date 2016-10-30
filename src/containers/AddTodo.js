@@ -5,24 +5,35 @@ const { addTodo } = require('../actions')
 let AddTodo = ({ dispatch }) => {
   let input
 
-  return (
-    <div>
-      <form onSubmit={e => {
-        e.preventDefault()
-        if (!input.value.trim()) {
-          return
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'form',
+      {
+        onSubmit: e => {
+          e.preventDefault()
+          if (!input.value.trim()) {
+            return
+          }
+          dispatch(addTodo(input.value))
+          input.value = ''
         }
-        dispatch(addTodo(input.value))
-        input.value = ''
-      }}>
-        <input ref={node => {
-          input = node
-        }} />
-        <button type="submit">
-          Add Todo
-        </button>
-      </form>
-    </div>
+      },
+      React.createElement(
+        'input',
+        {
+          ref: node => {
+            input = node
+          }
+        }
+      ),
+      React.createElement(
+        'button',
+        { type: 'submit' },
+        'Add Todo'
+      )
+    )
   )
 }
 AddTodo = connect()(AddTodo)

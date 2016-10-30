@@ -7,9 +7,12 @@ const reducer = require('./reducers')
 
 const store = createStore(reducer)
 
+const element = React.createElement(
+  Provider,
+  {store},
+  React.createElement(App, null)
+)
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  element,
   document.getElementById('root')
 )

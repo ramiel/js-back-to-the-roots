@@ -5,11 +5,13 @@ const VisibleTodoList = require('../containers/VisibleTodoList')
 
 class App extends React.Component {
   render () {
-    return (<div>
-      <AddTodo />
-      <VisibleTodoList />
-      <Footer />
-    </div>)
+    return React.createElement(
+        'div',
+        null,
+        React.createElement(AddTodo, null),
+        React.createElement(VisibleTodoList, null),
+        React.createElement(Footer, null)
+    )
   }
 }
 

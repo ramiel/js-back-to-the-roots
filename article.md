@@ -78,6 +78,8 @@ return Object.assign(
 
 It looks like this was the only place in the code where we used stage-0 features. Easy task. Other feature as `async/await` can have a larger impact after modification (i.e. to promises) but are not difficult.
 
+The code can be found [here](https://github.com/ramiel/naked-modern-js/tree/671b5ac6a3499e793207bb1b35f272d1cef28a74)
+
 ## Goodbye nowdays javascript
 
 It's time to prevent webpack to transpile ES6 code removing the preset from the configuration
@@ -132,6 +134,104 @@ class App extends React.Component {
 
 everything went fine. Using `classes` is fine.
 
-So, after removing the support for es6 we lost the ability to require modules through `import`. In a more complex application I fear the migration wouldn't be so easy. You can find the code from this iteration [here]()
+So, after removing the support for es6 we lost the ability to require modules through `import`. In a more complex application I fear the migration wouldn't be so easy. You can find the code from this iteration [here](https://github.com/ramiel/naked-modern-js/tree/b8347dd1bbc907fdd9c77cb436351bcaba555a15)
+
+## Removing react transpiling
+
+React offer a great tools to interact with its virtual DOM, `JSX`. With JSX you can camouflage javascript code as html-like elements.    
+So you can write
+```jsx
+<MyButton color="blue" shadowSize={2}>
+  Click Me
+</MyButton>
+```
+
+instead of
+
+```js
+React.createElement(
+  MyButton,
+  {color: 'blue', shadowSize: 2},
+  'Click Me'
+)
+```
+
+Let's see how difficult is to remove react support on our webpack configuration. As expected here webpack complaining for not understanding JSX
+
+```bash
+   9 | 
+  10 | render(
+> 11 |   <Provider store={store}>
+     |   ^
+  12 |     <App />
+  13 |   </Provider>,
+  14 |   document.getElementById('root')
+  ```
+
+ We have to change all the JSX. For example this simple code
+
+ ```js
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)
+```
+became this
+
+```js
+const element = React.createElement(
+  Provider,
+  {store},
+  React.createElement(App, null)
+)
+render(
+  element,
+  document.getElementById('root')
+)
+```
+
+which is not complex. But can became a nightmare. To mitigate this task you can use [the online Babel compiler](https://babeljs.io/repl/#?babili=false&evaluate=true&lineWrap=false&presets=es2015%2Creact%2Cstage-0&code=function%20hello()%20%7B%0A%20%20return%20%3Cdiv%3EHello%20world!%3C%2Fdiv%3E%3B%0A%7D) which will translate for you any JSX into the relative clean JS code.
+You cannot let the compiler do everything for you or you'll end with complex function like this
+```js
+React.createElement(
+  'a',
+  { href: '#',
+    onClick: (function (_onClick) {
+      function onClick (_x) {
+        return _onClick.apply(this, arguments)
+      }
+
+      onClick.toString = function () {
+        return _onClick.toString()
+      }
+
+      return onClick
+    }(function (e) {
+      e.preventDefault()
+      onClick()
+    }))
+  },
+  children
+)
+```
+which can be written
+```
+React.createElement(
+  'a',
+  { href: '#',
+    onClick: e => {
+      e.preventDefault()
+      onClick()
+    }
+  },
+  children
+)
+```
+
+Maybe is easier to write code from scratch than adapt existing JSX code. It's hard in any case. On the opposite, maybe this enforce you to write simpler components and to separate more, in order to have cleaner code.
+
+You can find this step [here]()
 
 

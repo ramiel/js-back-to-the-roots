@@ -2,16 +2,25 @@ const React = require('react')
 const { PropTypes } = require('react')
 const Todo = require('./Todo')
 
-const TodoList = ({ todos, onTodoClick }) => (
-  <ul>
-    {todos.map(todo =>
-      <Todo
-        key={todo.id}
-        {...todo}
-        onClick={() => onTodoClick(todo.id)}
-      />
-    )}
-  </ul>
+const TodoList = ({ todos, onTodoClick }) =>
+ React.createElement(
+    'ul',
+    null,
+    todos.map(todo => {
+      return React.createElement(
+        Todo,
+        Object.assign(
+          {
+            key: todo.id
+          },
+          todo,
+          {
+            onClick: () => onTodoClick(todo.id)
+          }
+        )
+      )
+    }
+  )
 )
 
 TodoList.propTypes = {

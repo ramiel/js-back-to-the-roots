@@ -2,14 +2,16 @@ const React = require('react')
 const { PropTypes } = require('react')
 
 const Todo = ({ onClick, completed, text }) => (
-  <li
-    onClick={onClick}
-    style={{
-      textDecoration: completed ? 'line-through' : 'none'
-    }}
-  >
-    {text}
-  </li>
+  React.createElement(
+    'li',
+    {
+      onClick: onClick,
+      style: {
+        textDecoration: completed ? 'line-through' : 'none'
+      }
+    },
+    text
+  )
 )
 
 Todo.propTypes = {
