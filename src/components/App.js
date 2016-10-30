@@ -1,14 +1,16 @@
-import React from 'react'
-import Footer from './Footer'
-import AddTodo from '../containers/AddTodo'
-import VisibleTodoList from '../containers/VisibleTodoList'
+const React = require('react')
+const Footer = require('./Footer')
+const AddTodo = require('../containers/AddTodo')
+const VisibleTodoList = require('../containers/VisibleTodoList')
 
-const App = () => (
-  <div>
-    <AddTodo />
-    <VisibleTodoList />
-    <Footer />
-  </div>
-)
+class App extends React.Component {
+  render () {
+    return (<div>
+      <AddTodo />
+      <VisibleTodoList />
+      <Footer />
+    </div>)
+  }
+}
 
-export default App
+module.exports = App

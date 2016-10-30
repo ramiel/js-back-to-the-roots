@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react'
+const React = require('react')
+const { PropTypes } = React
 
 const Link = ({ active, children, onClick }) => {
   if (active) {
@@ -23,4 +24,4 @@ Link.propTypes = {
   onClick: PropTypes.func.isRequired
 }
 
-export default Link
+module.exports = Link

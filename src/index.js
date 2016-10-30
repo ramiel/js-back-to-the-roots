@@ -1,9 +1,9 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
-import App from './components/App'
-import reducer from './reducers'
+const React = require('react')
+const { render } = require('react-dom')
+const { createStore } = require('redux')
+const { Provider } = require('react-redux')
+const App = require('./components/App')
+const reducer = require('./reducers')
 
 const store = createStore(reducer)
 

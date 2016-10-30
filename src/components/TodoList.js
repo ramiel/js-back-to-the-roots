@@ -1,5 +1,6 @@
-import React, { PropTypes } from 'react'
-import Todo from './Todo'
+const React = require('react')
+const { PropTypes } = require('react')
+const Todo = require('./Todo')
 
 const TodoList = ({ todos, onTodoClick }) => (
   <ul>
@@ -22,4 +23,4 @@ TodoList.propTypes = {
   onTodoClick: PropTypes.func.isRequired
 }
 
-export default TodoList
+module.exports = TodoList

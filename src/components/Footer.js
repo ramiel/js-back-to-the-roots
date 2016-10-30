@@ -1,5 +1,5 @@
-import React from 'react'
-import FilterLink from '../containers/FilterLink'
+const React = require('react')
+const FilterLink = require('../containers/FilterLink')
 
 const Footer = () => (
   <p>
@@ -19,4 +19,4 @@ const Footer = () => (
   </p>
 )
 
-export default Footer
+module.exports = Footer
