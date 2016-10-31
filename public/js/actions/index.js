@@ -15,7 +15,7 @@ const toggleTodo = (id) => ({
   id
 })
 
-module.exports = {
+window.actions = {
   addTodo,
   setVisibilityFilter,
   toggleTodo

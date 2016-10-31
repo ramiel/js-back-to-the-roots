@@ -232,6 +232,99 @@ React.createElement(
 
 Maybe is easier to write code from scratch than adapt existing JSX code. It's hard in any case. On the opposite, maybe this enforce you to write simpler components and to separate more, in order to have cleaner code.
 
-You can find this step [here]()
+You can find this step [here](https://github.com/ramiel/naked-modern-js/tree/7f2863c59aca382e45e5ef8ce687227509126ac5)
+
+## Thank you babel, I'll include modules by myself
+
+We are almost up. We just need to remove babel (and then webpack, which became useless). Removing babel and its loaders means we cannot use anymore require to include code and manage dependencies. We'll need to include all the external libraries through `script` tags and the same for all of our scripts.
+Ok, let's remove `webpack.config.js` and `package.json`. We won't need them anymore.
+We need to include our script directly in the html page (like at my grandma's times) but we have no bundle anymore. Let's include index.js and let see what happens. I moved it under `js` folder, just to follow an ancient convention ;)
+
+`<script type="text/javascript" src="js/index.js"></script>`
+
+I will continue to serve the page through a web server to avoid browser complaining. For this I'll use `http-server`, a static file server written in node.You can use nginx or what you prefer.
+
+```
+npm install http-server -g
+http-server public
+```
+
+If you open your devtools you'll notice that the browser is complaining about the `require` function which is not defined in the environment. As we said, we need to import our libraries differently.
+
+Our project depends a bunch of libraries:
+- react
+- react-dom
+- redux
+- react-redux
+we can dwnload them and include in our project but we're lucky enough and all are served by a [CDN](https://cdnjs.com/libraries/react/#).
+
+So now this is our index.html
+```html
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/4.4.5/react-redux.min.js"></script>
+```
+
+and this the index.js
+```js
+const React = window.React
+const { render } = window.ReactDOM
+const { createStore } = window.Redux
+const { Provider } = window.ReactRedux
+...
+```
+
+We need to include our javascript files too. The first required is App.js. Here the boring work of transforming all the require as we did in `index.js` and to include the file as a script in the html page. I already miss webpack which did all of this job for me. Another think you should do is to wrap every module in an autocalling function. This for example, is `App.js` after the restiling.
+```js
+;(function (window) {
+  const React = window.React
+  const Footer = window.Footer
+  const AddTodo = window.AddTodo
+  const VisibleTodoList = window.VisibleTodoList
+
+  class App extends React.Component {
+    render () {
+      return React.createElement(
+            'div',
+            null,
+            React.createElement(AddTodo, null),
+            React.createElement(VisibleTodoList, null),
+            React.createElement(Footer, null)
+        )
+    }
+    }
+
+  window.App = App
+})(window)
+```
+Here the inclusion order is important. At the end of the operation this is my body
+```html
+<body>
+    <div id="root"></div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/4.4.5/react-redux.js"></script>
+
+    <script type="text/javascript" src="js/actions/index.js"></script>
+    <script type="text/javascript" src="js/components/Link.js"></script>
+    <script type="text/javascript" src="js/containers/FilterLink.js"></script>
+    <script type="text/javascript" src="js/components/Footer.js"></script>
+    <script type="text/javascript" src="js/containers/AddTodo.js"></script>
+    <script type="text/javascript" src="js/components/Todo.js"></script>
+    <script type="text/javascript" src="js/components/TodoList.js"></script>
+    <script type="text/javascript" src="js/containers/VisibleTodoList.js"></script>
+    <script type="text/javascript" src="js/reducers/todos.js"></script>
+    <script type="text/javascript" src="js/reducers/visibilityFilter.js"></script>
+    <script type="text/javascript" src="js/reducers/index.js"></script>
+
+    <script type="text/javascript" src="js/components/App.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+</body>
+```
+scary eh?!
+
+Give a look at the complete code [here]()
 
 

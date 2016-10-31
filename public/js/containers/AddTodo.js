@@ -1,11 +1,12 @@
-const React = require('react')
-const { connect } = require('react-redux')
-const { addTodo } = require('../actions')
+;(function (window) {
+  const React = window.React
+  const { connect } = window.ReactRedux
+  const { addTodo } = window.actions
 
-let AddTodo = ({ dispatch }) => {
-  let input
+  let AddTodo = ({ dispatch }) => {
+    let input
 
-  return React.createElement(
+    return React.createElement(
     'div',
     null,
     React.createElement(
@@ -35,7 +36,8 @@ let AddTodo = ({ dispatch }) => {
       )
     )
   )
-}
-AddTodo = connect()(AddTodo)
+  }
+  AddTodo = connect()(AddTodo)
 
-module.exports = AddTodo
+  window.AddTodo = AddTodo
+})(window)
