@@ -9,3 +9,5 @@ public/bundle*
 # misc
 .DS_Store
 npm-debug.log
+
+/article.html
